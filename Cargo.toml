@@ -1,0 +1,24 @@
+[package]
+name = "bscore-lib"
+version = "0.1.0" # change with html_root_url in lib.rs
+edition = "2021"
+authors = ["nomissbowling <nomissbowling@yahoo.co.jp>"]
+
+description = "bowling score library for C (written in Rust)"
+keywords = ["bowling", "score", "bscore", "cdylib"]
+categories = ["game-development", "game-engines", "games"]
+license = "MIT"
+
+documentation = "https://docs.rs/bscore-lib/"
+homepage = "https://crates.io/crates/bscore-lib"
+repository = "https://github.com/nomissbowling/bscore-lib"
+
+readme = "README.md"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+bscore = { version = "0.1" }
