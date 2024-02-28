@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-int bscore_s(const char *src, size_t len, bool mode, char *dst, size_t size);
+int bscore_s(const char *src, size_t len, bool mode, char *dst, size_t *size);
 
 #ifdef __cplusplus
 }

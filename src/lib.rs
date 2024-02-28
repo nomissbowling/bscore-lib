@@ -1,4 +1,4 @@
-#![doc(html_root_url = "https://docs.rs/bscore-lib/1.0.0")]
+#![doc(html_root_url = "https://docs.rs/bscore-lib/1.0.1")]
 //! bscore-lib bowling score library for C (written in Rust)
 //!
 
@@ -6,7 +6,7 @@
 
 use std::slice;
 
-use bscore::bgame::bscore;
+use bscore::bgame::getscore;
 
 /// bscore_s
 /// - src: char *
@@ -16,14 +16,26 @@ use bscore::bgame::bscore;
 /// - size: size_t of dst buffer length
 #[no_mangle]
 pub extern "C" fn bscore_s(src: *const u8, len: usize, mode: bool,
-  dst: *mut u8, size: usize) -> i32 {
+  dst: *mut u8, size: *mut usize) -> i32 {
+  let sz = unsafe { slice::from_raw_parts_mut(size, 1) };
+  if dst != 0 as *mut u8 {
+    let d = unsafe { slice::from_raw_parts_mut(dst, sz[0]) };
+    if sz[0] > 0 { d[0] = 0u8; }
+  }
   let s = unsafe { slice::from_raw_parts(src, len).to_vec() };
-  let r = bscore(String::from_utf8(s).expect("u8").as_str(), mode).expect("e");
-  let o = format!("{}", r[0]);
-  let d = unsafe { slice::from_raw_parts_mut(dst, size) };
-  if o.len() > size - 1 { if size > 0 { d[0] = 0u8; } return -1; }
-  for (i, c) in o.chars().enumerate() { d[i] = c as u8; }
-  d[o.len()] = 0u8;
+  let s = String::from_utf8(s).expect("src should be utf8");
+  let score = getscore(s.as_str(), mode).expect("score sequence");
+  let o = format!("{}{}", score[0], score[0].p);
+  if dst == 0 as *mut u8 {
+    sz[0] = o.len() + 1;
+    return 0;
+  }
+  if o.len() > sz[0] - 1 { return -1; }
+  if dst != 0 as *mut u8 {
+    let d = unsafe { slice::from_raw_parts_mut(dst, sz[0]) };
+    for (i, c) in o.chars().enumerate() { d[i] = c as u8; }
+    d[o.len()] = 0u8;
+  }
   0
 }
 

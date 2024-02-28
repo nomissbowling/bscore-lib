@@ -13,8 +13,12 @@
 int main(int ac, char **av)
 {
   char src[] = "xxxxxxxxxxxx";
-  char dst[sizeof(src) * 8];
-  bscore_s(src, strlen(src), 0, dst, sizeof(dst));
+  size_t sz = 0;
+  bscore_s(src, strlen(src), 0, NULL, &sz);
+  char *dst = (char *)malloc(sz);
+  if(!dst) return -1;
+  bscore_s(src, strlen(src), 0, dst, &sz);
   printf("%s", dst);
+  free(dst);
   return 0;
 }
