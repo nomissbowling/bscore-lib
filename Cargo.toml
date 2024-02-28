@@ -1,6 +1,6 @@
 [package]
 name = "bscore-lib"
-version = "0.1.0" # change with html_root_url in lib.rs
+version = "1.0.0" # change with html_root_url in lib.rs
 edition = "2021"
 authors = ["nomissbowling <nomissbowling@yahoo.co.jp>"]
 
@@ -21,4 +21,4 @@ readme = "README.md"
 crate-type = ["cdylib"]
 
 [dependencies]
-bscore = { version = "0.1" }
+bscore = { version = "1.0" }
