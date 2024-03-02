@@ -1,4 +1,4 @@
-#![doc(html_root_url = "https://docs.rs/bscore-lib/1.0.2")]
+#![doc(html_root_url = "https://docs.rs/bscore-lib/1.1.1")]
 //! bscore-lib bowling score library for C (written in Rust)
 //!
 
@@ -24,9 +24,9 @@ pub extern "C" fn bscore_s(src: *const u8, len: usize, mode: bool,
   }
   let s = unsafe { slice::from_raw_parts(src, len).to_vec() };
   let s = String::from_utf8(s).expect("src should be utf8");
-  let scores = getscore(s.as_str(), mode).expect("score sequence");
-  let o = scores.iter().map(|score|
-    format!("{}{}\x0A", score, score.p)).collect::<Vec<_>>().join("");
+  let mut scores = getscore(s.as_str(), mode).expect("score sequence");
+  scores.p = true;
+  let o = scores.to_string();
   if dst == 0 as *mut u8 {
     sz[0] = o.len() + 1;
     return 0;
